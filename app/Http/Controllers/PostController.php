@@ -11,12 +11,12 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return view('admin.posts.index', compact('posts'));
+        return view('admin/posts/index', compact('posts'));
     }
 
     public function created()
     {
-        return view('admin.posts.created');
+        return view('admin/posts/created');
     }
 
     public function store(StoreUpdatePost $request)
