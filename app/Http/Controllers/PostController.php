@@ -10,7 +10,12 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
+       // $posts = Post::all();
+        //paginação paginate();
+        //ordenando orderBy(); 1- params = index; 2- parmas= DESC ou ASC
+        // Antigos para os mais novos latest();
+        $posts = Post::latest()->paginate(1);
+
         return view('admin/posts/index', compact('posts'));
     }
 
@@ -22,8 +27,8 @@ class PostController extends Controller
     public function store(StoreUpdatePost $request)
     {
         Post::create($request->all());
-        
-        return redirect()->route('posts.index');
+
+        return redirect()->route('posts.index')->with('message', 'Create sucess');
     }
 
     public function show($id)
@@ -54,5 +59,22 @@ class PostController extends Controller
 
         return view('admin.posts.edit', compact('post'));
     }
+
+    public function update(StoreUpdatePost $request,$id)
+    {
+        if(!$post = Post::find($id)){
+            return redirect()->back();
+        }
+        $post->update($request->all());
+        return redirect()->route('posts.index')->with('message', 'Update sucess');
+    }
+
+    public function search(Request $request)
+    {
+        $filters = $request->except('_token');
+        $posts = Post::where('title', 'LIKE', "%{$request->search}%")
+                        ->orWhere('content', 'LIKE', "%{$request->search}%")->paginate(1);
+
+        return view('admin.posts.index', compact('posts', 'filters'));
+    }
 }
- 
