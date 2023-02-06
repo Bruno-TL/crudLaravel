@@ -31,7 +31,7 @@ class PostController extends Controller
         $data = $request->all();
 
         if ($request->image->isValid()){
-            $nameFile = Str::of($request->title)->slug('-').'.'.$request->image->getClientOriginalExtensio();
+            $nameFile = Str::of($request->title)->slug('-').'.'.$request->image->getClientOriginalExtension();
             $image = $request->image->storeAs('posts', $nameFile);
             $data['image'] = $image;
         }
@@ -82,10 +82,10 @@ class PostController extends Controller
 
         $data = $request->all();
 
-        if ($request->image->isValid()) {
+        if ($request->image && $request->image->isValid()) {
             if (Storage::exists($post->image)) Storage::delete($post->data);
 
-            $nameFile = Str::of($request->title)->slug('-') . '.' . $request->image->getClientOriginalExtensio();
+            $nameFile = Str::of($request->title)->slug('-') . '.' . $request->image->getClientOriginalExtension();
             $image = $request->image->storeAs('posts', $nameFile);
             $data['image'] = $image;
         }
@@ -103,3 +103,5 @@ class PostController extends Controller
         return view('admin.posts.index', compact('posts', 'filters'));
     }
 }
+
+// Instalar o composer require laravel/breeze --dev
